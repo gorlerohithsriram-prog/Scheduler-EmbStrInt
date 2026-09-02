@@ -29,6 +29,8 @@ typedef struct {
 
     int queue_length;
     int queue_capacity;
+    
+    int latency_ms;
 } DeviceResources;
 
 typedef struct {
