@@ -13,8 +13,9 @@ int main(void)
     devices[0].resources.ram_total = 128;
     devices[0].resources.ram_free = 100;
     devices[0].resources.cpu_usage = 20;
-    devices[0].resources.queue_length = 0;
+    devices[0].resources.queue_length = 1;
     devices[0].resources.queue_capacity = 4;
+    devices[0].resources.latency_ms = 2;
 
     devices[0].capabilities.adc = 1;
     devices[0].capabilities.cnn = 1;
@@ -30,9 +31,10 @@ int main(void)
 
     devices[1].resources.ram_total = 512;
     devices[1].resources.ram_free = 400;
-    devices[1].resources.cpu_usage = 30;
-    devices[1].resources.queue_length = 0;
+    devices[1].resources.cpu_usage = 70;
+    devices[1].resources.queue_length = 3;
     devices[1].resources.queue_capacity = 4;
+    devices[1].resources.latency_ms = 8;
 
     devices[1].capabilities.adc = 1;
     devices[1].capabilities.cnn = 0;
@@ -60,9 +62,15 @@ int main(void)
 
 
     printf("Task %d submitted\n", task.id);
-
+    
+    SchedulerWeights weights = {
+        .cpu_weight = 0.4,
+        .queue_weight = 0.3,
+        .latency_weight = 0.3
+      };
+      
     Device *selected =
-        schedule_task(&task, devices, 2);
+        schedule_task(&task, devices, 2,&weights);
 
     if (selected != NULL) {
         printf("Task %d scheduled on device %d\n",
