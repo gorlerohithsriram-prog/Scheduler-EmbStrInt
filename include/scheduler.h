@@ -4,15 +4,30 @@
 #include "task.h"
 #include "device.h"
 
+typedef enum {
+    DEVICE_ELIGIBLE,
+    
+    REJECT_OFFLINE,
+    REJECT_RAM,
+    REJECT_QUEUE_FULL,
+    
+    REJECT_CAPABILITY_ADC,
+    REJECT_CAPABILITY_PWM,
+    REJECT_CAPABILITY_UART,
+    REJECT_CAPABILITY_WIFI,
+    REJECT_CAPABILITY_BLE,
+    REJECT_CAPABILITY_CNN,
+} EligibilityResult;
+  
 typedef struct {
     double cpu_weight;
     double queue_weight;
     double latency_weight;
 } SchedulerWeights;
 
-int device_can_run_task(
+EligibilityResult check_device_eligibility(
     const Task *task,
-    const Device *device
+    const device *device
 );
 
 double calculate_device_score(
