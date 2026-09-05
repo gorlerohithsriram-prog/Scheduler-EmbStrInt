@@ -27,7 +27,11 @@ typedef struct {
 
 EligibilityResult check_device_eligibility(
     const Task *task,
-    const device *device
+    const Device *device
+);
+
+const char *eligibility_result_string(
+    EligibilityResult result
 );
 
 double calculate_device_score(
@@ -41,6 +45,16 @@ Device *schedule_task(
     Device devices[],
     int device_count,
     const SchedulerWeights *weights
+);
+
+void reserve_device_resources(
+    const Task *task,
+    Device *device
+);
+
+void release_device_resources(
+    const Task *task,
+    Device *device
 );
 
 #endif
