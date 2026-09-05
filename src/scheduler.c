@@ -1,4 +1,4 @@
-#include"scheduler.h"
+#include "scheduler.h"
 #include<stdio.h>
 #include<stddef.h>
 
@@ -166,4 +166,38 @@ double calculate_device_score(
         weights->latency_weight * latency_score;
 
     return score;
+}
+
+void reserve_device_resources(
+    const Task *task,
+    Device *device
+)
+{
+    device->resources.ram_free -=
+        task->requirements.ram_required;
+
+    device->resources.queue_length++;
+
+    device->resources.cpu_usage +=
+        task->requirements.cpu_required;
+
+    if (device->resources.cpu_usage > 100)
+        device->resources.cpu_usage = 100;
+}
+
+void release_device_resources(
+    const Task *task,
+    Device *device
+)
+{
+    device->resources.ram_free +=
+        task->requirements.ram_required;
+
+    device->resources.queue_length--;
+
+    device->resources.cpu_usage -=
+        task->requirements.cpu_required;
+
+    if (device->resources.cpu_usage < 0)
+        device->resources.cpu_usage = 0;
 }
